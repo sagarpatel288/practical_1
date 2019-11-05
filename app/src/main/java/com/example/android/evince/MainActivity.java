@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.android.evince.adapter.RvMatrixAdapter;
-import com.example.android.evince.apputils.AppUtils;
 import com.example.android.evince.constants.AppConstants;
 import com.example.android.evince.database.AppDatabase;
 import com.example.android.evince.databinding.ActivityMainBinding;
@@ -16,7 +15,6 @@ import com.example.android.evince.utils.StringUtils;
 import com.example.android.evince.utils.Utils;
 import com.example.android.evince.viewutils.ViewUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,118 +25,65 @@ import androidx.recyclerview.widget.RecyclerView;
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, MainContract.MainView {
 
     private ActivityMainBinding mBinding;
-    private int mRows;
-    private int mColumns;
-    private int randomColor;
-    private int randomNumber;
-    private List<Matrix> mList = new ArrayList<>();
-    private List<Integer> randomList = new ArrayList<>();
-    private int position;
     private RvMatrixAdapter mAdapter;
+    private MainContract.Presenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        mPresenter = new Presenter(this, AppDatabase.getInstance(this).getAppDao(), SharedPrefs.getSharedPref(this));
         handleViews();
         ViewUtils.setOnClickListener(this, mBinding.viewMbtnApply, mBinding.viewMbtnRandom);
     }
 
     private void handleViews() {
-        if (SharedPrefs.getInt(this, AppConstants.STR_ROWS, -1) != -1) {
-            setRows(SharedPrefs.getInt(this, AppConstants.STR_ROWS, -1), true, false);
-        } else {
-            setRows(AppConstants.DEFAULT_ROW_COLUMNS, true, true);
-        }
-        if (SharedPrefs.getInt(this, AppConstants.STR_COLUMNS, -1) != -1) {
-            setColumns(SharedPrefs.getInt(this, AppConstants.STR_COLUMNS, -1), true, false);
-        } else {
-            setColumns(AppConstants.DEFAULT_ROW_COLUMNS, true, true);
-        }
-        if (SharedPrefs.getInt(this, AppConstants.STR_RANDOM_NUMBER, -1) != -1) {
-            setRandomNumber(SharedPrefs.getInt(this, AppConstants.STR_RANDOM_NUMBER, -1), true, false);
-        }
-        if (SharedPrefs.getInt(this, AppConstants.STR_RANDOM_COLOR, -1) != -1) {
-            setRandomColor(SharedPrefs.getInt(this, AppConstants.STR_RANDOM_COLOR, -1), true, false);
-        }
-        if (Utils.isNotNullNotEmpty(AppDatabase.getInstance(this).getAppDao().getAllMatrices())) {
-            mList = AppDatabase.getInstance(this).getAppDao().getAllMatrices();
-            randomList = AppUtils.shuffleList(mList);
-            if (getRandomNumber() != -1) {
-                position = randomList.indexOf(getRandomNumber());
-                // comment by srdpatel: 11/5/2019 If no matched number found, reset position to 0 to prevent indexOutOfBound
-                if (position == -1) {
-                    position = 0;
-                }
-            }
-        } else {
-            mList = AppUtils.getMatrix(getRows(), getColumns());
-            randomList = AppUtils.shuffleList(mList);
-        }
-        setRecyclerView(getRows(), getColumns());
-        if (getRandomNumber() != -1 && getRandomColor() != -1) {
-            highlightRandomMatch();
-        }
+       mPresenter.handleViews();
     }
-
-    public void setRows(int mRows, boolean setViewValue, boolean savePrefs) {
-        this.mRows = mRows;
+    
+    @Override
+    public void setRows(int mRows, boolean setViewValue) {
         if (mBinding != null && mRows >= 0 && setViewValue) {
             mBinding.viewTietRows.setText(String.valueOf(mRows));
         }
-        if (savePrefs) {
-            SharedPrefs.saveInt(this, AppConstants.STR_ROWS, mRows);
-        }
     }
 
-    public void setColumns(int mColumns, boolean setViewValue, boolean savePrefs) {
-        this.mColumns = mColumns;
+    @Override
+    public void setColumns(int mColumns, boolean setViewValue) {
         if (mBinding != null && mColumns >= 0 && setViewValue) {
             mBinding.viewTietColumns.setText(String.valueOf(mColumns));
         }
-        if (savePrefs) {
-            SharedPrefs.saveInt(this, AppConstants.STR_COLUMNS, mColumns);
-        }
     }
 
-    public void setRandomNumber(int randomNumber, boolean setViewValue, boolean savePrefs) {
-        this.randomNumber = randomNumber;
+    @Override
+    public void setRandomNumber(int randomNumber, boolean setViewValue) {
         if (setViewValue) {
             mBinding.viewTvRandomNumber.setText(String.valueOf(randomNumber));
         }
-        if (savePrefs) {
-            SharedPrefs.saveInt(this, AppConstants.STR_RANDOM_NUMBER, randomNumber);
-        }
     }
 
-    public void setRandomColor(int randomColor, boolean setViewValue, boolean savePrefs) {
-        this.randomColor = randomColor;
+    @Override
+    public void setRandomColor(int randomColor, boolean setViewValue) {
         if (setViewValue) {
             mBinding.viewTvRandomColor.setText(String.valueOf(randomColor));
             mBinding.viewTvRandomColor.setTextColor(randomColor);
         }
-        if (savePrefs) {
-            SharedPrefs.saveInt(this, AppConstants.STR_RANDOM_COLOR, randomColor);
+    }
+
+    @Override
+    public void setDefaultData(int rows, int columns, List<Matrix> matrixList, List<Integer> randomList, int positionOfLastStoredRandomNumberIfAny) {
+        setRecyclerView(rows, columns, matrixList);
+        if (mPresenter.getRandomNumber() != -1 && mPresenter.getRandomColor() != -1) {
+            highLightRandomMatch();
         }
     }
 
-    public int getRandomNumber() {
-        return randomNumber;
-    }
-
-    public int getRows() {
-        return mRows;
-    }
-
-    public int getColumns() {
-        return mColumns;
-    }
-
-    private void setRecyclerView(int rows, int columns) {
+    @Override
+    public void setRecyclerView(int rows, int columns, List<Matrix> mList) {
         // comment by srdpatel: 11/5/2019 if it is vertical, then span means columns. If orientation is horizontal, then span means rows.
         int span;
         if (columns > rows) {
@@ -156,14 +101,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.viewRv.setAdapter(mAdapter);
     }
 
-    public int getRandomColor() {
-        return randomColor;
+    @Override
+    public void onReInitRandomList() {
+        showMessage(getString(R.string.st_error_no_more_unique_random_number_left));
     }
 
-    private void highlightRandomMatch() {
+    @Override
+    public void highLightRandomMatch() {
         if (mAdapter != null) {
             mAdapter.clearSelection();
-            mAdapter.highlightItem(getRandomNumber(), getRandomColor());
+            mAdapter.highlightItem(mPresenter.getRandomNumber(), mPresenter.getRandomColor());
         }
     }
 
@@ -172,19 +119,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()) {
             case R.id.view_mbtn_apply:
                 if (isValidInput()) {
-                    setRecyclerView();
+                    onClickApply();
                 }
                 break;
             case R.id.view_mbtn_random:
                 if (isValidInput()) {
-                    if (Utils.isNotNullNotEmpty(mList) && Utils.isNotNullNotEmpty(randomList)) {
-                        generateRandomNumber();
+                    if (mAdapter != null && Utils.isNotNullNotEmpty(mAdapter.getList()) && Utils.isNotNullNotEmpty(mPresenter.getRandomList())) {
+                        onClickRandom();
                     } else {
                         showMessage(getString(R.string.st_error_random_number_cannot_be_generated_before_matrix));
                     }
                 }
                 break;
         }
+    }
+
+    private void onClickApply() {
+        mBinding.viewTvRandomNumber.setText("");
+        mBinding.viewTvRandomColor.setText("");
+        KeyboardUtils.hideSoftKeyboard(this);
+        mPresenter.onClickApply(Integer.parseInt(StringUtils.getString(mBinding.viewTietRows, "0")),
+                Integer.parseInt(StringUtils.getString(mBinding.viewTietColumns, "0")));
     }
 
     private boolean isValidInput() {
@@ -204,32 +159,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
-    private void setRecyclerView() {
-        setRows(Integer.parseInt(StringUtils.getString(mBinding.viewTietRows, "0")), false, true);
-        setColumns(Integer.parseInt(StringUtils.getString(mBinding.viewTietColumns, "0")), false, true);
-        mList = AppUtils.getMatrix(getRows(), getColumns());
-        randomList = AppUtils.shuffleList(mList);
-        mBinding.viewTvRandomNumber.setText("");
-        mBinding.viewTvRandomColor.setText("");
-        setRecyclerView(getRows(), getColumns());
-        KeyboardUtils.hideSoftKeyboard(this);
-    }
-
-    private void generateRandomNumber() {
-        if (Utils.hasElement(randomList, position)) {
-            int randomNumber = randomList.get(position);
-            setRandomNumber(randomNumber, true, true);
-
-            int randomColor = Utils.getRandomColor();
-            setRandomColor(randomColor, true, true);
-            highlightRandomMatch();
-            position++;
-        } else {
-            showMessage(getString(R.string.st_error_no_more_unique_random_number_left));
-            position = 0;
-            randomList = AppUtils.shuffleList(mList);
-            generateRandomNumber();
-        }
+    private void onClickRandom() {
+       mPresenter.onClickRandom();
     }
 
     private void showMessage(String message) {
