@@ -206,6 +206,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setColumns(Integer.parseInt(StringUtils.getString(mBinding.viewTietColumns, "0")), false, true);
         mList = AppUtils.getMatrix(getRows(), getColumns());
         randomList = AppUtils.shuffleList(mList);
+        mBinding.viewTvRandomNumber.setText("");
+        mBinding.viewTvRandomColor.setText("");
         setRecyclerView(getRows(), getColumns());
     }
 
