@@ -179,7 +179,7 @@
                 android:clipToPadding="false"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:spanCount="5"
-                tools:itemCount="100"
+                tools:itemCount="9"
                 tools:listitem="@layout/item_matrix"
                 />
 

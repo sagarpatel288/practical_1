@@ -6,13 +6,13 @@ import android.view.View;
 import com.example.android.evince.adapter.RvMatrixAdapter;
 import com.example.android.evince.apputils.AppUtils;
 import com.example.android.evince.constants.AppConstants;
+import com.example.android.evince.database.AppDatabase;
 import com.example.android.evince.databinding.ActivityMainBinding;
 import com.example.android.evince.pojo.Matrix;
 import com.example.android.evince.utils.SharedPrefs;
 import com.example.android.evince.utils.StringUtils;
 import com.example.android.evince.utils.Utils;
 import com.example.android.evince.viewutils.ViewUtils;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +21,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import static android.widget.Toast.LENGTH_SHORT;
+import static android.widget.Toast.makeText;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -68,11 +71,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void handleViews() {
-//        if (Utils.isNotNullNotEmpty(AppDatabase.getInstance(this).getAppDao().getAllMatrices())) {
-//            mList = AppDatabase.getInstance(this).getAppDao().getAllMatrices();
-//        } else {
+        if (Utils.isNotNullNotEmpty(AppDatabase.getInstance(this).getAppDao().getAllMatrices())) {
+            mList = AppDatabase.getInstance(this).getAppDao().getAllMatrices();
+        } else {
             mList = AppUtils.getMatrix(getRows(), getColumns());
-//        }
+        }
         setRecyclerView(getRows(), getColumns());
     }
 
@@ -116,19 +119,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void setRecyclerView(int rows, int columns) {
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, columns != 0 ? columns : 5, columns > rows ? RecyclerView.HORIZONTAL : RecyclerView.VERTICAL, false);
-        mBinding.viewRv.setLayoutManager(gridLayoutManager);
-        RvMatrixAdapter rvMatrixAdapter = new RvMatrixAdapter(this, mList);
-        mBinding.viewRv.setAdapter(rvMatrixAdapter);
-    }
-
     public int getRows() {
         return mRows;
     }
 
     public int getColumns() {
         return mColumns;
+    }
+
+    private void setRecyclerView(int rows, int columns) {
+        // comment by srdpatel: 11/5/2019 if it is vertical, then span means columns. If orientation is horizontal, then span means rows.
+        int span;
+        if (columns > rows) {
+            span = rows;
+        } else {
+            span = columns;
+        }
+        if (span == 0){
+            span = 1;
+        }
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, span,  span == rows ? RecyclerView.HORIZONTAL : RecyclerView.VERTICAL, false);
+        mBinding.viewRv.setLayoutManager(gridLayoutManager);
+        RvMatrixAdapter rvMatrixAdapter = new RvMatrixAdapter(this, mList);
+        mBinding.viewRv.setAdapter(rvMatrixAdapter);
     }
 
     @Override
@@ -152,10 +165,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private boolean isValidInput() {
-        if (!ViewUtils.hasTextValue(mBinding.viewTietRows)) {
+        if (!ViewUtils.hasTextValue(mBinding.viewTietRows) || Integer.parseInt(StringUtils.getString(mBinding.viewTietRows, "0")) == 0) {
             showMessage(getString(R.string.st_error_row_can_not_be_empty));
             return false;
-        } else if (!ViewUtils.hasTextValue(mBinding.viewTietColumns)) {
+        } else if (!ViewUtils.hasTextValue(mBinding.viewTietColumns)|| Integer.parseInt(StringUtils.getString(mBinding.viewTietColumns, "0")) == 0) {
             showMessage(getString(R.string.st_error_column_can_not_be_empty));
             return false;
         }
@@ -165,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void setRecyclerView() {
         setRows(Integer.parseInt(StringUtils.getString(mBinding.viewTietRows, "0")), false, true);
         setColumns(Integer.parseInt(StringUtils.getString(mBinding.viewTietColumns, "0")), false, true);
+        mList = AppUtils.getMatrix(getRows(), getColumns());
         setRecyclerView(getRows(), getColumns());
     }
 
@@ -177,6 +191,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void showMessage(String message) {
-        Snackbar.make(mBinding.viewCoor, message, Snackbar.LENGTH_LONG).show();
+        makeText(this, message, LENGTH_SHORT).show();
     }
 }
