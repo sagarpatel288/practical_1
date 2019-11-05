@@ -1,5 +1,6 @@
 package com.example.android.evince;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 
@@ -9,6 +10,7 @@ import com.example.android.evince.constants.AppConstants;
 import com.example.android.evince.database.AppDatabase;
 import com.example.android.evince.databinding.ActivityMainBinding;
 import com.example.android.evince.pojo.Matrix;
+import com.example.android.evince.utils.KeyboardUtils;
 import com.example.android.evince.utils.SharedPrefs;
 import com.example.android.evince.utils.StringUtils;
 import com.example.android.evince.utils.Utils;
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         handleViews();
@@ -209,6 +212,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.viewTvRandomNumber.setText("");
         mBinding.viewTvRandomColor.setText("");
         setRecyclerView(getRows(), getColumns());
+        KeyboardUtils.hideSoftKeyboard(this);
     }
 
     private void generateRandomNumber() {
