@@ -22,7 +22,7 @@ public interface AppDao {
     @Query("UPDATE Matrix SET isSelected = 0 WHERE primaryKey IN (:primaryIds)")
     void setIsSelectedFalse(List<Integer> primaryIds);
 
-    @Query("UPDATE Matrix SET isSelected = 0")
+    @Query("UPDATE Matrix SET isSelected = 0 AND color = 0")
     void setAllMatricesSelectedToFalse();
 
     @Query("UPDATE Matrix SET isSelected =:isSelected AND color =:color WHERE primaryKey =:primaryKey")

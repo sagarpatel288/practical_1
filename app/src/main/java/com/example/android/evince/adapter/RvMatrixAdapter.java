@@ -60,7 +60,7 @@ public class RvMatrixAdapter extends RecyclerView.Adapter {
                 ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
                 Matrix matrix = mList.get(position);
                 itemViewHolder.mBinding.viewMbtn.setText(String.valueOf(matrix.getNumber()));
-                ViewUtils.setEnable(matrix.isSelected(), itemViewHolder.mBinding.viewMbtn);
+                ViewUtils.setEnable(false, itemViewHolder.mBinding.viewMbtn);
                 if (matrix.getColor() != 0 && matrix.getColor() != -1) {
                     itemViewHolder.mBinding.viewMbtn.setTextColor(matrix.getColor());
                     itemViewHolder.mBinding.viewMbtn.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.dr_white_rect));
@@ -112,6 +112,7 @@ public class RvMatrixAdapter extends RecyclerView.Adapter {
         AppUtils.setSelectedFalseInDb(getContext());
         if (Utils.isNotNullNotEmpty(mList)) {
             for (Matrix matrix : mList) {
+                matrix.setColor(0);
                 matrix.setSelected(false);
             }
             notifyDataSetChanged();
@@ -125,12 +126,6 @@ public class RvMatrixAdapter extends RecyclerView.Adapter {
         public ItemViewHolder(@NonNull View itemView, ItemMatrixBinding mBinding) {
             super(itemView);
             this.mBinding = mBinding;
-            mBinding.viewMbtn.setOnClickListener(view -> {
-                int clickedPosition = getAdapterPosition();
-                Matrix matrix = mList.get(clickedPosition);
-                matrix.setColor(getColor());
-                updateItem(clickedPosition, matrix);
-            });
         }
     }
 }

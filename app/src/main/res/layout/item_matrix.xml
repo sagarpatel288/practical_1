@@ -5,11 +5,11 @@
 
     <Button
         android:id="@+id/view_mbtn"
-        android:background="@drawable/dr_gradient_rect"
-        android:textColor="@color/colorWhiteFfA100"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="20"
-        />
-
+        android:layout_marginEnd="@dimen/dim_app_space"
+        android:layout_marginRight="@dimen/dim_app_space"
+        android:background="@drawable/dr_gradient_rect"
+        android:textColor="@color/colorWhiteFfA100"
+        tools:text="20" />
 </layout>
