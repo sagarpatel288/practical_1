@@ -20,6 +20,10 @@
     <string name="st_error_column_can_not_be_empty">Column cannot be empty!</string>
     <!-- activity_main -> Error message to show when user clicks on random button without matrix [CHAR LIMIT= 400] -->
     <string name="st_error_random_number_cannot_be_generated_before_matrix">Random number cannot be generated before matrix!</string>
+    <!-- activity_main -> Error message to show when user enters row/column value more than pre-fixed limit [CHAR LIMIT= 400] -->
+    <string name="st_error_row_cannot_be_more_than">Row can not be more than #</string>
+    <!-- activity_main -> Error message to show when user enters row/column value more than pre-fixed limit [CHAR LIMIT= 400] -->
+    <string name="st_error_column_cannot_be_more_than">Column can not be more than #</string>
     <!-- activity_main -> Use as placeholder with tool attributes anywhere in the app [CHAR LIMIT= NONE] -->
     <string name="st_placeholder">placeholder</string>
     <!--endregion-->

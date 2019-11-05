@@ -135,10 +135,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             span = columns;
         }
-        if (span == 0){
+        // comment by srdpatel: 11/5/2019 To prevent span 0 exception
+        if (span == 0) {
             span = 1;
         }
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, span,  span == rows ? RecyclerView.HORIZONTAL : RecyclerView.VERTICAL, false);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, span, span == rows ? RecyclerView.HORIZONTAL : RecyclerView.VERTICAL, false);
         mBinding.viewRv.setLayoutManager(gridLayoutManager);
         RvMatrixAdapter rvMatrixAdapter = new RvMatrixAdapter(this, mList);
         mBinding.viewRv.setAdapter(rvMatrixAdapter);
@@ -168,8 +169,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (!ViewUtils.hasTextValue(mBinding.viewTietRows) || Integer.parseInt(StringUtils.getString(mBinding.viewTietRows, "0")) == 0) {
             showMessage(getString(R.string.st_error_row_can_not_be_empty));
             return false;
-        } else if (!ViewUtils.hasTextValue(mBinding.viewTietColumns)|| Integer.parseInt(StringUtils.getString(mBinding.viewTietColumns, "0")) == 0) {
+        } else if (ViewUtils.getInt(mBinding.viewTietRows) > AppConstants.Limits.MAX_ROW_COLUMNS) {
+            showMessage(getString(R.string.st_error_row_cannot_be_more_than).replace("#", String.valueOf(AppConstants.Limits.MAX_ROW_COLUMNS)));
+            return false;
+        } else if (!ViewUtils.hasTextValue(mBinding.viewTietColumns) || Integer.parseInt(StringUtils.getString(mBinding.viewTietColumns, "0")) == 0) {
             showMessage(getString(R.string.st_error_column_can_not_be_empty));
+            return false;
+        } else if (ViewUtils.getInt(mBinding.viewTietColumns) > AppConstants.Limits.MAX_ROW_COLUMNS) {
+            showMessage(getString(R.string.st_error_column_cannot_be_more_than).replace("#", String.valueOf(AppConstants.Limits.MAX_ROW_COLUMNS)));
             return false;
         }
         return true;

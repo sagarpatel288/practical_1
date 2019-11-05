@@ -3,6 +3,8 @@ package com.example.android.evince.viewutils;
 import android.view.View;
 import android.widget.EditText;
 
+import com.example.android.evince.utils.StringUtils;
+
 public final class ViewUtils {
     private ViewUtils() {
     }
@@ -25,5 +27,9 @@ public final class ViewUtils {
                 view.setEnabled(enable);
             }
         }
+    }
+
+    public static int getInt(EditText editText) {
+        return Integer.parseInt(StringUtils.getString(editText, "0"));
     }
 }

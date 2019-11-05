@@ -9,7 +9,7 @@ package com.example.android.evince.constants;
  * @since 1.0
  */
 
-public class AppConstants {
+public final class AppConstants {
     public static final String STR_SHARED_PREF = "sharedPreferences";
     public static final String STR_MSG_ERROR_SHARED_PREF_REFLECTION
             = "Use getInstance() method to get single instance of this class. " +
@@ -20,4 +20,13 @@ public class AppConstants {
     public static final String STR_RANDOM_NUMBER = "random_number";
     public static final String STR_RANDOM_COLOR = "random_color";
     public static final int DEFAULT_ROW_COLUMNS = 5;
+
+    public static final class Limits {
+        private Limits() {
+        }
+        public static final int MAX_ROW_COLUMNS = 10;
+    }
+
+    private AppConstants() {
+    }
 }
