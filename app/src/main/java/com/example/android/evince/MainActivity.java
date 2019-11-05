@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.randomColor = randomColor;
         if (setViewValue) {
             mBinding.viewTvRandomColor.setText(String.valueOf(randomColor));
+            mBinding.viewTvRandomColor.setTextColor(randomColor);
         }
         if (savePrefs) {
             SharedPrefs.saveInt(this, AppConstants.STR_RANDOM_COLOR, randomColor);
@@ -213,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             int randomNumber = randomList.get(position);
             setRandomNumber(randomNumber, true, true);
 
-            int randomColor = Utils.getRandomHSVColor();
+            int randomColor = Utils.getRandomColor();
             setRandomColor(randomColor, true, true);
             highlightRandomMatch();
             position++;

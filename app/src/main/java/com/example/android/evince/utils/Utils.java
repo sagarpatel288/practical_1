@@ -38,6 +38,11 @@ public final class Utils {
         return Color.HSVToColor(alpha, new float[]{hue, saturation, value});
     }
 
+    public static int getRandomColor(){
+        Random rnd = new Random();
+        return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+    }
+
     public static int getRandomNumber(int row, int column) {
         Random random = new Random();
         return random.nextInt(getTotalItems(row, column) + 1);

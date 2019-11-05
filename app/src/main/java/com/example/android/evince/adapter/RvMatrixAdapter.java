@@ -62,7 +62,7 @@ public class RvMatrixAdapter extends RecyclerView.Adapter {
                 itemViewHolder.mBinding.viewMbtn.setText(String.valueOf(matrix.getNumber()));
                 ViewUtils.setEnable(matrix.isSelected(), itemViewHolder.mBinding.viewMbtn);
                 if (matrix.getColor() != 0 && matrix.getColor() != -1) {
-                    itemViewHolder.mBinding.viewMbtn.setBackgroundColor(matrix.getColor());
+                    itemViewHolder.mBinding.viewMbtn.setTextColor(matrix.getColor());
                 } else {
                     itemViewHolder.mBinding.viewMbtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorWhiteFfA100));
                 }
