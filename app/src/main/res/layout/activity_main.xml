@@ -112,6 +112,21 @@
                 />
 
             <TextView
+                android:id="@+id/view_tv_random_number_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                app:layout_constraintBottom_toTopOf="@+id/view_tv_random_number"
+                android:layout_marginStart="@dimen/dim_app_space"
+                android:layout_marginLeft="@dimen/dim_app_space"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/view_mbtn_random"
+                app:layout_constraintRight_toLeftOf="@id/view_mbtn_random"
+                android:text="@string/st_random_number"
+                />
+
+            <TextView
                 style="@style/TvRandomHeading"
                 android:id="@+id/view_tv_random_number"
                 android:layout_width="wrap_content"
@@ -128,6 +143,24 @@
                 app:layout_constraintRight_toLeftOf="@id/view_mbtn_random"
                 tools:text="100"
                 />
+
+            <TextView
+                android:id="@+id/view_tv_random_color_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                app:layout_constraintBottom_toTopOf="@+id/view_tv_random_color"
+                android:layout_marginStart="@dimen/dim_app_space"
+                android:layout_marginLeft="@dimen/dim_app_space"
+                android:layout_marginEnd="@dimen/dim_app_space"
+                android:layout_marginRight="@dimen/dim_app_space"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toEndOf="@id/view_mbtn_random"
+                app:layout_constraintLeft_toRightOf="@id/view_mbtn_random"
+                android:text="@string/st_random_color"
+                />
+
 
             <TextView
                 style="@style/TvRandomHeading"
