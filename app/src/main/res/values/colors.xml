@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <!--color name: colorBlack, followed by 2 digits of hex code: 00, followed by alpha percentage: A100-->
+    <color name="colorBlack00A100">#000000</color>
+    <color name="colorGreyA0A100">#A09F9F</color>
+    <color name="colorDivider">@color/colorGreyA0A100</color>
+    <color name="colorWhiteFfA100">#ffffff</color>
+    <!--Button Gradient color start-->
+    <color name="colorStartButton">#0b0b0b</color>
+    <!--Button Gradient color end-->
+    <color name="colorEndButton">#64939292</color>
+</resources>

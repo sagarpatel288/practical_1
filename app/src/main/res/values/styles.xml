@@ -1,0 +1,21 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="TvTitleNormal">
+        <item name="android:textColor">@color/colorBlack00A100</item>
+        <item name="android:textSize">@dimen/dim_tv_title_heading_24sp</item>
+    </style>
+
+    <style name="TvRandomHeading" parent="TvTitleNormal">
+        <item name="android:textSize">@dimen/dim_tv_random_heading_20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+</resources>

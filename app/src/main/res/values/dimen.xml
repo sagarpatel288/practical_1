@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="dim_tv_title_heading_24sp">24sp</dimen>
+    <dimen name="dim_tv_random_heading_20sp">20sp</dimen>
+    <dimen name="dim_tv_button_label_14sp">14sp</dimen>
+    <dimen name="dim_view_space_10dp">10dp</dimen>
+    <dimen name="dim_view_space_5dp">5dp</dimen>
+    <dimen name="dim_view_space_20dp">20dp</dimen>
+    <dimen name="dim_app_space">12dp</dimen>
+    <dimen name="dim_divider">1dp</dimen>
+    <dimen name="dim_radi_mbtn_8dp">8dp</dimen>
+</resources>
