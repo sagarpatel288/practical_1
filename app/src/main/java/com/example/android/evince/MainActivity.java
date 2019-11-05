@@ -33,25 +33,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int randomColor;
     private int randomNumber;
     private List<Matrix> mList = new ArrayList<>();
-
-    public int getRandomColor() {
-        return randomColor;
-    }
-
-    public int getRandomNumber() {
-        return randomNumber;
-    }
+    private List<Integer> randomList = new ArrayList<>();
+    private int position;
+    private RvMatrixAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        initControls();
         handleViews();
         ViewUtils.setOnClickListener(this, mBinding.viewMbtnApply, mBinding.viewMbtnRandom);
     }
 
-    private void initControls() {
+    private void handleViews() {
         if (SharedPrefs.getInt(this, AppConstants.STR_ROWS, -1) != -1) {
             setRows(SharedPrefs.getInt(this, AppConstants.STR_ROWS, -1), true, false);
         } else {
@@ -68,15 +62,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (SharedPrefs.getInt(this, AppConstants.STR_RANDOM_COLOR, -1) != -1) {
             setRandomColor(SharedPrefs.getInt(this, AppConstants.STR_RANDOM_COLOR, -1), true, false);
         }
-    }
-
-    private void handleViews() {
         if (Utils.isNotNullNotEmpty(AppDatabase.getInstance(this).getAppDao().getAllMatrices())) {
             mList = AppDatabase.getInstance(this).getAppDao().getAllMatrices();
+            randomList = AppUtils.shuffleList(mList);
+            if (getRandomNumber() != -1) {
+                position = randomList.indexOf(getRandomNumber());
+                // comment by srdpatel: 11/5/2019 If no matched number found, reset position to 0 to prevent indexOutOfBound
+                if (position == -1) {
+                    position = 0;
+                }
+            }
         } else {
             mList = AppUtils.getMatrix(getRows(), getColumns());
+            randomList = AppUtils.shuffleList(mList);
         }
         setRecyclerView(getRows(), getColumns());
+        if (getRandomNumber() != -1 && getRandomColor() != -1) {
+            highlightRandomMatch();
+        }
     }
 
     public void setRows(int mRows, boolean setViewValue, boolean savePrefs) {
@@ -119,6 +122,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    public int getRandomNumber() {
+        return randomNumber;
+    }
+
     public int getRows() {
         return mRows;
     }
@@ -141,8 +148,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, span, span == rows ? RecyclerView.HORIZONTAL : RecyclerView.VERTICAL, false);
         mBinding.viewRv.setLayoutManager(gridLayoutManager);
-        RvMatrixAdapter rvMatrixAdapter = new RvMatrixAdapter(this, mList);
-        mBinding.viewRv.setAdapter(rvMatrixAdapter);
+        mAdapter = new RvMatrixAdapter(this, mList);
+        mBinding.viewRv.setAdapter(mAdapter);
+    }
+
+    public int getRandomColor() {
+        return randomColor;
+    }
+
+    private void highlightRandomMatch() {
+        if (mAdapter != null) {
+            mAdapter.clearSelection();
+            mAdapter.highlightItem(getRandomNumber(), getRandomColor());
+        }
     }
 
     @Override
@@ -155,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.view_mbtn_random:
                 if (isValidInput()) {
-                    if (Utils.isNotNullNotEmpty(mList)) {
+                    if (Utils.isNotNullNotEmpty(mList) && Utils.isNotNullNotEmpty(randomList)) {
                         generateRandomNumber();
                     } else {
                         showMessage(getString(R.string.st_error_random_number_cannot_be_generated_before_matrix));
@@ -186,15 +204,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setRows(Integer.parseInt(StringUtils.getString(mBinding.viewTietRows, "0")), false, true);
         setColumns(Integer.parseInt(StringUtils.getString(mBinding.viewTietColumns, "0")), false, true);
         mList = AppUtils.getMatrix(getRows(), getColumns());
+        randomList = AppUtils.shuffleList(mList);
         setRecyclerView(getRows(), getColumns());
     }
 
     private void generateRandomNumber() {
-        int randomNumber = Utils.getRandomNumber(getRows(), getColumns());
-        setRandomNumber(randomNumber, true, true);
+        if (Utils.hasElement(randomList, position)) {
+            int randomNumber = randomList.get(position);
+            setRandomNumber(randomNumber, true, true);
 
-        int randomColor = Utils.getRandomHSVColor();
-        setRandomColor(randomColor, true, true);
+            int randomColor = Utils.getRandomHSVColor();
+            setRandomColor(randomColor, true, true);
+            highlightRandomMatch();
+            position++;
+        } else {
+            showMessage(getString(R.string.st_error_no_more_unique_random_number_left));
+            position = 0;
+            randomList = AppUtils.shuffleList(mList);
+            generateRandomNumber();
+        }
     }
 
     private void showMessage(String message) {

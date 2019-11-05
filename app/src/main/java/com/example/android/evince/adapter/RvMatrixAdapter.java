@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.evince.R;
+import com.example.android.evince.apputils.AppUtils;
 import com.example.android.evince.databinding.ItemMatrixBinding;
 import com.example.android.evince.pojo.Matrix;
 import com.example.android.evince.utils.Utils;
@@ -82,11 +83,36 @@ public class RvMatrixAdapter extends RecyclerView.Adapter {
         return Utils.isNotNullNotEmpty(mList) ? mList.size() : 0;
     }
 
+    public void highlightItem(int number, int color) {
+        AppUtils.setSelectedInDb(getContext(), number, color);
+        List<Matrix> matchedMatrixList = Utils.getFilteredList(mList, input -> input != null && input.getNumber() == number);
+        if (Utils.isNotNullNotEmpty(matchedMatrixList)) {
+            Matrix matrix = matchedMatrixList.get(0);
+            int index = mList.indexOf(matrix);
+            if (index != -1) {
+                matrix = mList.get(index);
+                matrix.setSelected(true);
+                matrix.setColor(color);
+                updateItem(index, matrix);
+            }
+        }
+    }
+
     public void updateItem(int position, Matrix matrix) {
         if (Utils.hasElement(mList, position)) {
             mList.set(position, matrix);
             notifyItemChanged(position);
             notifyItemRangeChanged(position, getItemCount());
+        }
+    }
+
+    public void clearSelection() {
+        AppUtils.setSelectedFalseInDb(getContext());
+        if (Utils.isNotNullNotEmpty(mList)) {
+            for (Matrix matrix : mList) {
+                matrix.setSelected(false);
+            }
+            notifyDataSetChanged();
         }
     }
 

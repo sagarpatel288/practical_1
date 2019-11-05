@@ -19,11 +19,23 @@ public interface AppDao {
     @Update
     void updateMatrix(Matrix matrix);
 
+    @Query("UPDATE Matrix SET isSelected = 0 WHERE primaryKey IN (:primaryIds)")
+    void setIsSelectedFalse(List<Integer> primaryIds);
+
+    @Query("UPDATE Matrix SET isSelected = 0")
+    void setAllMatricesSelectedToFalse();
+
+    @Query("UPDATE Matrix SET isSelected =:isSelected AND color =:color WHERE primaryKey =:primaryKey")
+    void updateMatrix(int primaryKey, boolean isSelected, int color);
+
     @Delete
     void delete(Matrix matrix);
 
     @Query("SELECT * FROM Matrix WHERE isSelected = 1")
     Matrix getSelectedMatrix();
+
+    @Query("SELECT * FROM Matrix WHERE number = :number")
+    Matrix getMatrix(int number);
 
     @Query("DELETE FROM Matrix")
     void deleteMatrix();
