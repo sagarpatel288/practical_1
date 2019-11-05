@@ -3,9 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/view_mbtn"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:background="@drawable/dr_gradient_rect"
+        android:textColor="@color/colorWhiteFfA100"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="20"
