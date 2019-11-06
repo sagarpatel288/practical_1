@@ -16,8 +16,8 @@ class AppConstants//Private constructor
     companion object AppConstants {
         val STR_SHARED_PREF = "sharedPreferences"
         val STR_MSG_ERROR_SHARED_PREF_REFLECTION = "Use getInstance() method to get single instance of this class. " +
-                "\nUse getSharedPref(Context mContext) method to get the single SharedPreferences instance of this class. " +
-                "\nUse getEditor(Context mContext) method to get the single SharedPreferences.Editor instance of this class. "
+                "\nUse getSharedPref(Context mContext) method to get the single SharedPreferences instance. " +
+                "\nUse getEditor(Context mContext) method to get the single SharedPreferences.Editor instance. "
         val STR_ROWS = "rows"
         val STR_COLUMNS = "columns"
         val STR_RANDOM_NUMBER = "random_number"

@@ -26,6 +26,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, MainContract.Mai
     private var mAdapter: RvMatrixAdapter? = null
     private var mPresenter: MainContract.Presenter? = null
 
+    /**
+     * 11/6/2019
+     * Apply validation before trying to generate matrix
+     *
+     * @author srdpatel
+     * @since $1.0$
+     */
     private val isValidInput: Boolean
         get() {
             if (!ViewUtils.hasTextValue(mBinding!!.viewTietRows) || Integer.parseInt(StringUtils.getString(mBinding!!.viewTietRows, "0")) == 0) {
@@ -56,25 +63,53 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, MainContract.Mai
     private fun handleViews() {
         mPresenter!!.handleViews()
     }
-    
+
+    /**
+     * 11/6/2019
+     * Useful to restore user preferences
+     *
+     * @author srdpatel
+     * @since $1.0$
+     */
     override fun setRows(mRows: Int, setViewValue: Boolean) {
         if (mBinding != null && mRows >= 0 && setViewValue) {
             mBinding!!.viewTietRows.setText(mRows.toString())
         }
     }
 
+    /**
+     * 11/6/2019
+     * Useful to restore user preferences
+     *
+     * @author srdpatel
+     * @since $1.0$
+     */
     override fun setColumns(mColumns: Int, setViewValue: Boolean) {
         if (mBinding != null && mColumns >= 0 && setViewValue) {
             mBinding!!.viewTietColumns.setText(mColumns.toString())
         }
     }
 
+    /**
+     * 11/6/2019
+     * Show generated random number on text view
+     *
+     * @author srdpatel
+     * @since $1.0$
+     */
     override fun setRandomNumber(randomNumber: Int, setViewValue: Boolean) {
         if (setViewValue && randomNumber != -1) {
             mBinding!!.viewTvRandomNumber.text = randomNumber.toString()
         }
     }
 
+    /**
+     * 11/6/2019
+     * Show generated random color code on text view
+     *
+     * @author srdpatel
+     * @since $1.0$
+     */
     override fun setRandomColor(randomColor: Int, setViewValue: Boolean) {
         if (setViewValue) {
             mBinding!!.viewTvRandomColor.text = randomColor.toString()
@@ -82,6 +117,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, MainContract.Mai
         }
     }
 
+    /**
+     * 11/6/2019
+     * Restore user preference / last saved data
+     *
+     * @author srdpatel
+     * @since $1.0$
+     */
     override fun setDefaultData(rows: Int, columns: Int, matrixList: MutableList<Matrix>, randomList: MutableList<Int>, positionOfLastStoredRandomNumberIfAny: Int) {
         setRecyclerView(rows, columns, matrixList)
         if (mPresenter!!.randomNumber != -1 && mPresenter!!.randomColor != -1) {
@@ -89,6 +131,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, MainContract.Mai
         }
     }
 
+    /**
+     * 11/6/2019
+     * Resets the recyclerView after {@link #onClickApply} success
+     *
+     * @author srdpatel
+     * @since $1.0$
+     */
     override fun setRecyclerView(rows: Int, columns: Int, mList: MutableList<Matrix>) {
         // comment by srdpatel: 11/5/2019 if it is vertical, then span means columns. If orientation is horizontal, then span means rows.
         var span: Int
@@ -107,10 +156,24 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, MainContract.Mai
         mBinding!!.viewRv.adapter = mAdapter
     }
 
+    /**
+     * 11/6/2019
+     * As per discussion, after all possible random numbers have been generated, we will re-initialize the
+     * random number generation
+     * @author srdpatel
+     * @since $1.0$
+     */
     override fun onReInitRandomList() {
         showMessage(getString(R.string.st_error_no_more_unique_random_number_left))
     }
 
+    /**
+     * 11/6/2019
+     * As per discussion, we will directly show the generated random number in matrix with generated random color
+     *
+     * @author srdpatel
+     * @since $1.0$
+     */
     override fun highLightRandomMatch() {
         if (mAdapter != null) {
             mAdapter!!.clearSelection()
@@ -133,6 +196,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, MainContract.Mai
         }
     }
 
+    /**
+     * 11/6/2019
+     * We are re-setting the values as soon as user clicks on apply button
+     *
+     * @author srdpatel
+     * @since $1.0$
+     */
     private fun onClickApply() {
         mBinding!!.viewTvRandomNumber.text = ""
         mBinding!!.viewTvRandomColor.text = ""
@@ -141,10 +211,24 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, MainContract.Mai
                 Integer.parseInt(StringUtils.getString(mBinding!!.viewTietColumns, "0")))
     }
 
+    /**
+     * 11/6/2019
+     * Generate random number
+     *
+     * @author srdpatel
+     * @since $1.0$
+     */
     private fun onClickRandom() {
         mPresenter!!.onClickRandom()
     }
 
+    /**
+     * 11/6/2019
+     * Show any success, error or toast message
+     *
+     * @author srdpatel
+     * @since $1.0$
+     */
     private fun showMessage(message: String) {
         makeText(this, message, LENGTH_SHORT).show()
     }

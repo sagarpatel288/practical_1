@@ -76,22 +76,6 @@ private constructor() {
             return mEditor
         }
 
-        fun savePrefs(context: Context, key: String, value: String) {
-            SharedPrefs.getEditor(context)!!.putString(key, value).apply()
-        }
-
-        fun saveInt(context: Context, key: String, value: Int) {
-            SharedPrefs.getEditor(context)!!.putInt(key, value).apply()
-        }
-
-        fun getString(context: Context, key: String, defaultValue: String): String? {
-            return SharedPrefs.getSharedPref(context)!!.getString(key, defaultValue)
-        }
-
-        fun getInt(context: Context, key: String, defaultValue: Int): Int {
-            return SharedPrefs.getSharedPref(context)!!.getInt(key, defaultValue)
-        }
-
         /**
          * Gives SharedPreferences with secure singleton pattern
          *
