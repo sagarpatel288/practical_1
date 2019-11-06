@@ -57,18 +57,16 @@ class Presenter internal constructor(private val mainView: MainContract.MainView
         mainView.setRandomColor(dataInteractor.randomColor, true)
         if (Utils.isNotNullNotEmpty(appDao.allMatrices)) {
             val mList = appDao.allMatrices
-            var randomList = AppUtils.shuffleList(mList)
+            val randomList = AppUtils.shuffleList(mList)
             var position = -1
             if (randomNumber != -1) {
                 position = randomList.indexOf(randomNumber)
             }
-            randomList = randomList
             positionOfLastStoredRandomNumberIfAny = position
             mainView.setDefaultData(rows, columns, mList, randomList, position)
         } else {
             val mList = AppUtils.getMatrix(rows, columns)
-            var randomList = AppUtils.shuffleList(mList)
-            randomList = randomList
+            val randomList = AppUtils.shuffleList(mList)
             positionOfLastStoredRandomNumberIfAny = -1
             mainView.setDefaultData(rows, columns, mList, randomList, -1)
         }
@@ -91,11 +89,13 @@ class Presenter internal constructor(private val mainView: MainContract.MainView
     }
 
     override fun onClickApply(rows: Int, columns: Int) {
+        dataInteractor.clearnSharedPrefs()
         saveRows(rows)
         saveColumns(columns)
         val mList = AppUtils.getMatrix(rows, columns)
         randomList = AppUtils.shuffleList(mList)
         saveMatrixList(mList)
+        positionOfLastStoredRandomNumberIfAny = 0
         mainView.setRecyclerView(rows, columns, mList)
     }
 
@@ -122,7 +122,7 @@ class Presenter internal constructor(private val mainView: MainContract.MainView
 
     override fun increasePosition() {
         var position = positionOfLastStoredRandomNumberIfAny
-        position = position + 1
+        position += 1
         positionOfLastStoredRandomNumberIfAny = position
     }
 }

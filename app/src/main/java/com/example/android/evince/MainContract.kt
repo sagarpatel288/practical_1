@@ -62,6 +62,8 @@ interface MainContract {
 
         var positionOfLastStoredRandomNumberIfAny: Int
 
+        fun clearnSharedPrefs()
+
         fun saveRows(rows: Int)
 
         fun saveColumns(columns: Int)

@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, MainContract.Mai
     }
 
     override fun setRandomNumber(randomNumber: Int, setViewValue: Boolean) {
-        if (setViewValue) {
+        if (setViewValue && randomNumber != -1) {
             mBinding!!.viewTvRandomNumber.text = randomNumber.toString()
         }
     }

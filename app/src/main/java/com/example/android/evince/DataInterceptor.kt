@@ -7,6 +7,10 @@ import com.example.android.evince.pojo.Matrix
 import java.util.*
 
 class DataInterceptor internal constructor(private val appDao: AppDao, private val mSharedPrefs: SharedPreferences) : MainContract.DataInteractor {
+    override fun clearnSharedPrefs() {
+        mSharedPrefs.edit().clear().apply()
+    }
+
     override var randomList: List<Int> = ArrayList()
         get() = field
     override var positionOfLastStoredRandomNumberIfAny = -1
