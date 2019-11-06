@@ -1,4 +1,7 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 29
@@ -35,6 +38,11 @@ dependencies { config ->
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidSupportLibs(config)
     utilities(config)
+    implementation "androidx.core:core-ktx:+"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+repositories {
+    mavenCentral()
 }
 
 static void androidSupportLibs(config) {
@@ -47,7 +55,7 @@ static void androidSupportLibs(config) {
 
     //Room
     config.implementation "androidx.room:room-runtime:$room_version"
-    config.annotationProcessor "androidx.room:room-compiler:$room_version" // For Kotlin use kapt instead of annotationProcessor
+    config.kapt "androidx.room:room-compiler:$room_version" // For Kotlin use kapt instead of annotationProcessor
 }
 
 static void utilities(config){
