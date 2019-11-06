@@ -3,6 +3,9 @@
     <dimen name="dim_tv_title_heading_24sp">24sp</dimen>
     <dimen name="dim_tv_random_heading_20sp">20sp</dimen>
     <dimen name="dim_tv_button_label_14sp">14sp</dimen>
+    <dimen name="dim_tv_18sp">18sp</dimen>
+    <dimen name="dim_tv_16sp">16sp</dimen>
+    <dimen name="dim_tv_20sp">20sp</dimen>
     <dimen name="dim_view_space_10dp">10dp</dimen>
     <dimen name="dim_view_space_5dp">5dp</dimen>
     <dimen name="dim_view_space_20dp">20dp</dimen>

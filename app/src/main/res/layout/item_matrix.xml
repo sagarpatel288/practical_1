@@ -11,5 +11,6 @@
         android:layout_marginRight="@dimen/dim_app_space"
         android:background="@drawable/dr_gradient_rect"
         android:textColor="@color/colorWhiteFfA100"
+        android:textSize="@dimen/dim_tv_16sp"
         tools:text="20" />
 </layout>

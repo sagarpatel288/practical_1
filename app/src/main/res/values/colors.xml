@@ -9,7 +9,7 @@
     <color name="colorDivider">@color/colorGreyA0A100</color>
     <color name="colorWhiteFfA100">#ffffff</color>
     <!--Button Gradient color start-->
-    <color name="colorStartButton">#0b0b0b</color>
+    <color name="colorStartButton">#800B0B0B</color>
     <!--Button Gradient color end-->
     <color name="colorEndButton">#64939292</color>
 </resources>
