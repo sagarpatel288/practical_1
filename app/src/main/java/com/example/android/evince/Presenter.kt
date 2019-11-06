@@ -58,6 +58,7 @@ class Presenter internal constructor(private val mainView: MainContract.MainView
         if (Utils.isNotNullNotEmpty(appDao.allMatrices)) {
             val mList = appDao.allMatrices
             val randomList = AppUtils.shuffleList(mList)
+            this.randomList = randomList
             var position = -1
             if (randomNumber != -1) {
                 position = randomList.indexOf(randomNumber)
@@ -67,6 +68,7 @@ class Presenter internal constructor(private val mainView: MainContract.MainView
         } else {
             val mList = AppUtils.getMatrix(rows, columns)
             val randomList = AppUtils.shuffleList(mList)
+            this.randomList = randomList
             positionOfLastStoredRandomNumberIfAny = -1
             mainView.setDefaultData(rows, columns, mList, randomList, -1)
         }
@@ -105,10 +107,10 @@ class Presenter internal constructor(private val mainView: MainContract.MainView
 
     override fun onClickRandom() {
         if (Utils.hasElement(randomList, positionOfLastStoredRandomNumberIfAny)) {
-            var randomNumber = randomList[positionOfLastStoredRandomNumberIfAny]
+            val randomNumber = randomList[positionOfLastStoredRandomNumberIfAny]
             saveRandomNumber(randomNumber)
             mainView.setRandomNumber(randomNumber, true)
-            var randomColor = Utils.randomColor
+            val randomColor = Utils.randomColor
             saveRandomColor(randomColor)
             mainView.setRandomColor(randomColor, true)
             mainView.highLightRandomMatch()

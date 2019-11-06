@@ -25,7 +25,7 @@
     <!-- activity_main -> Error message to show when user enters row/column value more than pre-fixed limit [CHAR LIMIT= 400] -->
     <string name="st_error_column_cannot_be_more_than">Column can not be more than #</string>
     <!-- activity_main -> Error message to show when no more unique random number is left [CHAR LIMIT= 400] -->
-    <string name="st_error_no_more_unique_random_number_left">Reset done! Regenerating random numbers!</string>
+    <string name="st_error_no_more_unique_random_number_left">Generating random numbers from the beginning!</string>
     <!-- activity_main -> Use as placeholder with tool attributes anywhere in the app [CHAR LIMIT= NONE] -->
     <string name="st_placeholder">placeholder</string>
     <!--endregion-->
